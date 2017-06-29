@@ -2,6 +2,7 @@ package cn.zsza.controller;
 
 
 import cn.zsza.entity.Person;
+import cn.zsza.repository.PersonRepository;
 import cn.zsza.service.PersonService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -26,6 +28,9 @@ public class PersonController {
 
     @Autowired
     private PersonService personService;
+
+    @Autowired
+    private PersonRepository personRepository;
 
     @ApiOperation(value = "查询所有person")
     @RequestMapping( value = "/get",method = {RequestMethod.GET, RequestMethod.POST})
@@ -43,5 +48,15 @@ public class PersonController {
         Person person = personService.getPersonByName(name);
 
         return person;
+    }
+
+    @ApiOperation(value = "测试")
+    @RequestMapping( value = "/test",method = {RequestMethod.GET, RequestMethod.POST})
+    public String test(){
+
+        List<String> nameList = personRepository.findNameByAges(Arrays.asList(12, 18));
+        System.out.println("nameList:" + nameList);
+
+        return "success";
     }
 }
