@@ -7,6 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -31,6 +33,10 @@ public interface PersonRepository extends JpaRepository<Person,Long> {
 
     @Query("select count(id) from Person  where name = ?1 and age = ?2")
     Integer getCountByNameAndAge(String name,Integer age);
+
+
+    @Query("select sum(p.age) from Person p where p.id in ?1 and DATE_FORMAT(p.createDate,'%m-%Y') = DATE_FORMAT(SYSDATE(),'%m-%Y')")
+    Integer sumAges(List<Long> ids);
 
 
 }
