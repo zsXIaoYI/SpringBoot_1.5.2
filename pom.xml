@@ -59,6 +59,10 @@
       <scope>runtime</scope>
     </dependency>
 
+    <!-- 热部署
+       Shift+Ctrl+Alt+/，选择Registry
+       compiler.automake.allow.when.app.running
+    -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-devtools</artifactId>
@@ -132,6 +136,22 @@
 
   <build>
     <finalName>SpringBoot-1.5.2</finalName>
+
+    <filters>
+      <filter>${basedir}/src/main/build/${environment}.properties</filter>
+    </filters>
+
+    <resources>
+      <resource>
+        <filtering>true</filtering>
+        <directory>src/main/resources</directory>
+        <includes>
+          <include>*.properties</include>
+          <include>*/*.properties</include>
+          <include>*.yml</include>
+        </includes>
+      </resource>
+    </resources>
     <plugins>
       <plugin>
         <groupId>org.springframework.boot</groupId>
@@ -140,6 +160,37 @@
           <fork>true</fork>
         </configuration>
       </plugin>
+
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <configuration>
+          <encoding>utf-8</encoding>
+          <useDefaultDelimiters>true</useDefaultDelimiters>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <id>dev</id>
+      <properties>
+        <environment>dev</environment>
+      </properties>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+    </profile>
+
+    <profile>
+      <id>test</id>
+      <properties>
+        <environment>test</environment>
+      </properties>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+    </profile>
+  </profiles>
+
 </project>
